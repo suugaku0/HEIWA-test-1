@@ -1,0 +1,21 @@
+.w-20p{
+    width: 20%;
+    height:0;
+    padding-bottom: 20%;
+}
+.text-bigger{
+    font-size: 73px;
+    color:white;
+    font-family:"Kosugi Maru", sans-serif;
+}
+.w-40p{
+    margin-top: 10px;
+    width: 40%;
+    height:0;
+    padding-bottom: 40px;
+}
+.font-main{
+    font-family:"Kosugi Maru", sans-serif;
+    justify-items: center;
+    align-items: center;
+}

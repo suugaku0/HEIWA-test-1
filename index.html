@@ -1,26 +1,64 @@
 <!DOCTYPE html>
 <html class="bg-blue-300 h-full">
-    <head>
-        <meta charset="utf-8">
-        <script type="module" src="index.js"></script>
-        <link rel="stylesheet" href="index.css">
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Kosugi+Maru&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-　　　　<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-        <title>HEIWAの鐘</title>
-    </head>
-    <body class="h-full">
-        <form class="flex girid flex-col items-center justify-center h-full grid-cols-2 gap-6">
-            <div class="items-center justify-center">
-                <label class="h-full w-full">名前</label>
-                <input class="h-full w-full rounded-md text-lg space-mono-regular" type="text" id="data">
-            </div>
-            <div class="flex items-center bg-red-500 rounded-md width-120px">
-                <button class="h-full width-120px center" id="submit">開始！</button>
-            </div>
-        </form>
-    </body>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Kosugi+Maru&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <!-- Firebase v8 CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <title>HEIWAの鐘</title>
+  </head>
+  <body class="h-full">
+    <form class="flex grid flex-col items-center justify-center h-full grid-cols-2 gap-6">
+      <div class="items-center justify-center">
+        <label class="h-full w-full">名前</label>
+        <input class="h-full w-full rounded-md text-lg space-mono-regular" type="text" id="data">
+      </div>
+      <div class="flex items-center bg-red-500 rounded-md width-120px">
+        <button type="submit" class="h-full width-120px center" id="submit">開始！</button>
+      </div>
+    </form>
+
+    <script>
+      // Firebase 設定
+      const firebaseConfig = {
+        apiKey: "AIzaSyD6FqAgmcwjOQQFmpu_QgJ8YZJBaECgtz8",
+        authDomain: "serverofheiwa.firebaseapp.com",
+        projectId: "serverofheiwa",
+        storageBucket: "serverofheiwa.firebasestorage.app",
+        messagingSenderId: "66883464111",
+        appId: "1:66883464111:web:88c2b67fdf7f3aeb489d5a"
+      };
+
+      // 初期化
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      // ボタンクリック処理
+      document.getElementById("submit").addEventListener("click", async (e) => {
+        e.preventDefault(); // フォームの送信を防ぐ
+        const datavalue = document.getElementById("data").value.trim();
+        if (datavalue === "") return;
+
+        try {
+          await db.collection("mycollection").add({
+            text: datavalue,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            score: firebase.firestore.FieldValue.increment(0)
+          });
+          console.log("✅ Firestore に保存できました！");
+          // 入力をクリア
+          document.getElementById('data').value = '';
+          // 次のページへ
+          location.href = "mainPage.html";
+        } catch (err) {
+          console.error("❌ Firestore 保存エラー", err);
+        }
+      });
+    </script>
+  </body>
 </html>
